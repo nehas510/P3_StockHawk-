@@ -109,6 +109,7 @@ public class AddWidgetIntentService extends IntentService {
             appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
         }
 
+        
     }
 }
 
