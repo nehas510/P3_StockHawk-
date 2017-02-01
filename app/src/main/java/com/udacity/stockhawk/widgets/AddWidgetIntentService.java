@@ -26,18 +26,18 @@ import java.util.Locale;
 public class AddWidgetIntentService extends IntentService {
 
 
-    private final DecimalFormat dollarFormatWithPlus;
-    private final DecimalFormat dollarFormat;
-    private final DecimalFormat percentageFormat;
+    private final DecimalFormat dollarPlus;
+    private final DecimalFormat dollar;
+    private final DecimalFormat percentagePlus;
 
     {
-        dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
-        dollarFormatWithPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
-        dollarFormatWithPlus.setPositivePrefix("+$");
-        percentageFormat = (DecimalFormat) NumberFormat.getPercentInstance(Locale.getDefault());
-        percentageFormat.setMaximumFractionDigits(2);
-        percentageFormat.setMinimumFractionDigits(2);
-        percentageFormat.setPositivePrefix("+");
+        dollar = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
+        dollarPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
+        dollarPlus.setPositivePrefix("+$");
+        percentagePlus = (DecimalFormat) NumberFormat.getPercentInstance(Locale.getDefault());
+        percentagePlus.setMaximumFractionDigits(2);
+        percentagePlus.setMinimumFractionDigits(2);
+        percentagePlus.setPositivePrefix("+");
     }
 
 
@@ -67,12 +67,10 @@ public class AddWidgetIntentService extends IntentService {
                 null,
                 Contract.Quote.COLUMN_SYMBOL);
 
-        // do some checks before bind data :)
         if (cursor == null || cursor.getCount() < 1 || !cursor.moveToFirst()) {
             return;
         }
 
-        // get first item in cursor
         cursor.moveToPosition(0);
 
 
@@ -81,20 +79,20 @@ public class AddWidgetIntentService extends IntentService {
                     R.layout.add_stock_widget);
 
             remoteViews.setTextViewText(R.id.symbol, cursor.getString(Contract.Quote.POSITION_SYMBOL));
-            remoteViews.setTextViewText(R.id.price, dollarFormat.format(cursor.getFloat(Contract.Quote.POSITION_PRICE)));
+            remoteViews.setTextViewText(R.id.price, dollar.format(cursor.getFloat(Contract.Quote.POSITION_PRICE)));
 
 
-            float rawAbsoluteChange = cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
+            float absoluteChange = cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
             float percentageChange = cursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE);
 
-            if (rawAbsoluteChange > 0) {
+            if (absoluteChange > 0) {
                 remoteViews.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_green);
             } else {
                 remoteViews.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_red);
             }
 
-            String change = dollarFormatWithPlus.format(rawAbsoluteChange);
-            String percentage = percentageFormat.format(percentageChange / 100);
+            String change = dollarPlus.format(absoluteChange);
+            String percentage = percentagePlus.format(percentageChange / 100);
 
             if (PrefUtils.getDisplayMode(context)
                     .equals(context.getString(R.string.pref_display_mode_absolute_key))) {
