@@ -86,7 +86,7 @@ public class AddWidgetIntentService extends IntentService {
             float percentageChange = cursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE);
 
             if (absoluteChange > 0) {
-                remoteViews.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_green);
+                remoteViews.setInt(R.id.change,"setBackgroundResource", R.drawable.percent_change_pill_green);
             } else {
                 remoteViews.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_red);
             }
@@ -109,7 +109,7 @@ public class AddWidgetIntentService extends IntentService {
             appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
         }
 
-        
+
     }
 }
 
