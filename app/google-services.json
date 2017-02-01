@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "562211211652",
+    "firebase_url": "https://stock-hawk-fab74.firebaseio.com",
+    "project_id": "stock-hawk-fab74",
+    "storage_bucket": "stock-hawk-fab74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562211211652:android:9808a16399a49d6e",
+        "android_client_info": {
+          "package_name": "com.udacity.stockhawk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "562211211652-218ecg0vlc1rri5mf491e612050do1ql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udacity.stockhawk",
+            "certificate_hash": "E2EA93C3B6F97BE45DE287C1D214EDC165C65CE0"
+          }
+        },
+        {
+          "client_id": "562211211652-vc4reqfjsi7vs3b31a45bp0jcqalpdap.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "562211211652-5ptlahm1v2qt1d3j26udir7lbbuiebna.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCruPtRQ9aSrOCyElA9viQk8CWqUp-mD9k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

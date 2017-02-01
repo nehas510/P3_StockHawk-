@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">الأسهم هوك</string>
+
+    <string name="pref_stocks_initialized_key" translatable="false">initialized</string>
+
+    <string name="pref_stocks_key">مخازن</string>
+
+
+    <string name="pref_display_mode_key">وحدات($)</string>
+    <string name="pref_display_mode_default"  translatable="false">@string/pref_display_mode_percentage_key</string>
+    <string name="pref_display_language_change_arabic">الإنجليزية</string>
+    <string name="pref_display_language_change_English">العربية</string>
+
+
+    <string name="pref_display_mode_absolute_key">مطلق</string>
+    <string name="pref_display_mode_percentage_key">النسبة المئوية</string>
+
+    <string name="default_stocks_yahoo" translatable="false">YHOO</string>
+    <string name="default_stocks_apple" translatable="false">AAPL</string>
+    <string name="default_stocks_microsoft" translatable="false">MSFT</string>
+    <string name="default_stocks_facebook" translatable="false">FB</string>
+
+
+    <string name="action_change_units" translatable="false">@string/pref_display_mode_key</string>
+    <string name="action_change_language" translatable="false">@string/pref_display_language_change</string>
+
+    <string name="dialog_title">إضافة أسهم</string>
+    <string name="dialog_hint">رمز (e.g. GOOG)</string>
+    <string name="dialog_cancel">إلغاء</string>
+    <string name="dialog_add">إضافة</string>
+
+    <string name="error_no_network">أي شبكة اتصال! سيتم تحميل المؤشر الأسهم عندما تتوفر الشبكة.</string>
+    <string name="error_no_stocks">وأضافت يوجد مخزون! اضغط على زر عمل العائمة لإضافة واحد.</string>
+
+    <string name="toast_stock_added_no_connectivity">وأضاف الرمز٪ الصورة. سيتم تحديث عندما شبكة المتاحة.</string>
+    <string name="toast_no_connectivity">سيتم تحديث عندما شبكة المتاحة.</string>
+    <string name="add_stock">إضافة الأسهم</string>
+    <string name="title_activity_stock_detail" translatable="false">StockDetailActivity</string>
+    <string name="action_settings">إعدادات</string>
+    <string name="pref_display_language_change">لغة(تغيير)</string>
+    <string name="pref_display_language_default">\@string/pref_display_language_change_English</string>
+    <string name="stock_hawk">الأسهم هوك</string>
+    <string name="error_empty_view">لا المخزونات المتاحة !!</string>
+    <string name="no_stocks_exists">عدم وجود هذا المخزون !!</string>
+    <string name="add_widget">Add widget</string>
+    <string name="appwidget_text" translatable="false">EXAMPLE</string>
+    <string name="configure" translatable="false">Configure</string>
+
+</resources>
