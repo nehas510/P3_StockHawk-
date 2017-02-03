@@ -203,16 +203,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-  /*  @Subscribe
-    public void handelNoStockError(StockDoesNotExist event){
-        swipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(this, event.getText(), Toast.LENGTH_SHORT).show();
-
-        String symbol = event.getSymbol();
-        PrefUtils.removeStock(MainActivity.this, symbol);
-        getContentResolver().delete(Contract.Quote.makeUriForStock(symbol), null, null);
-    }
-*/
 
     @Override
     protected void onStart() {

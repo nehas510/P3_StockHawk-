@@ -28,7 +28,6 @@ import java.util.List;
 import au.com.bytecode.opencsv.CSVReader;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class StockDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -158,14 +157,10 @@ private boolean fetchDataFirst = false;
         if(!fetchDataFirst) {
             setData(historyData);
             fetchDataFirst = true;
-            // supportStartPostponedEnterTransition();
         }
 
 
-        Timber.d("Data : ",rawData);
 
-
-      //  Toast.makeText(this, "This is the symbol : " + rawData, Toast.LENGTH_LONG).show();
 
     }
 
