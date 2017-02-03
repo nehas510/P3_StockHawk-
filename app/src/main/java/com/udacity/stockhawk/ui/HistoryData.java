@@ -8,6 +8,12 @@ public class HistoryData {
 
     private  float history;
     private  float values;
+    private String date;
+
+
+    public String getDate(){ return date;}
+
+    public void setDate(String date){ this.date = date;}
 
     public float getHistory() {
         return history;

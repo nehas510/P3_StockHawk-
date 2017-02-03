@@ -1,26 +1,28 @@
 package com.udacity.stockhawk.ui;
 
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
+import com.udacity.stockhawk.ui.formatter.XValueFormater;
+import com.udacity.stockhawk.ui.formatter.YValueFormatter;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -31,97 +33,69 @@ import timber.log.Timber;
 public class StockDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     @BindView(R.id.stock_chart)
-    BarChart stockGraphView;
+    LineChart stockGraphView;
+
+    private Float refTime;
+   private  boolean firstData = true;
+    private String rawData;
+    private  List<HistoryData> historyData = new ArrayList<>();
 
 private boolean fetchDataFirst = false;
 
 
-    void setStockGraphView(List<HistoryData> data){
 
-     //   stockGraphView.setOnChartValueSelectedListener((OnChartValueSelectedListener) this);
-stockGraphView.setDrawBarShadow(false);
-        stockGraphView.setDrawValueAboveBar(true);
-
-      //  stockGraphView.setViewPortOffsets(0, 0, 0, 0);
-
-        stockGraphView.getDescription().setEnabled(false);
-       stockGraphView.setMaxVisibleValueCount(60);
+    public void setData(List<HistoryData> dataEntry) {
 
 
-        stockGraphView.setPinchZoom(false);
+        ArrayList<Entry> values = new ArrayList<Entry>();
 
-        stockGraphView.setDrawGridBackground(false);
-        stockGraphView.setMaxHighlightDistance(300);
+        for (HistoryData data : dataEntry) {
+
+            values.add(new Entry((data.getHistory()) - refTime, data.getValues()));
+        }
+
+        LineDataSet dataSet = new LineDataSet(values, "Dataset1");
+        dataSet.setColor(R.color.colorPrimary);
+        dataSet.setLineWidth(2f);
+        dataSet.setDrawHighlightIndicators(false);
+        dataSet.setCircleColor(R.color.colorPrimary);
+        dataSet.setHighLightColor(R.color.colorPrimary);
+        dataSet.setDrawValues(false);
+
 
 
         XAxis xAxis = stockGraphView.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setValueFormatter(new XValueFormater("MMM/yy", refTime));
         xAxis.setDrawGridLines(true);
         xAxis.setAxisLineColor(R.color.colorPrimary);
+        xAxis.setAxisLineWidth(1.5f);
         xAxis.setTextColor(R.color.colorPrimary);
-       // xAxis.setGranularity(1f); // only intervals of 1 day
-        xAxis.setLabelCount(7);
+        xAxis.setTextSize(12f);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
+        YAxis yAxisRight = stockGraphView.getAxisRight();
+        yAxisRight.setEnabled(false);
 
         YAxis yAxis = stockGraphView.getAxisLeft();
-        yAxis.setLabelCount(8, false);
-        yAxis.setTextColor(R.color.colorPrimary);
-        yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        yAxis.setValueFormatter(new YValueFormatter());
         yAxis.setDrawGridLines(true);
         yAxis.setAxisLineColor(R.color.colorPrimary);
+        yAxis.setAxisLineWidth(1.5f);
+        yAxis.setTextColor(R.color.colorPrimary);
+        yAxis.setTextSize(12f);
 
-        stockGraphView.getAxisRight().setEnabled(false);
 
-        setData(data);
+        LineData lineData = new LineData(dataSet);
+        stockGraphView.setData(lineData);
 
         stockGraphView.getLegend().setEnabled(false);
 
         stockGraphView.animateXY(2000, 2000);
 
-
         stockGraphView.invalidate();
 
 
 
-
-    }
-
-    public void setData(List<HistoryData> dataEntry) {
-
-
-        ArrayList<BarEntry> values = new ArrayList<BarEntry>();
-
-        for (int i = 0; i < dataEntry.size(); i++) {
-
-            values.add(new BarEntry(dataEntry.get(i).getValues(), dataEntry.get(i).getHistory()));
-        }
-
-        BarDataSet set1;
-
-        if (stockGraphView.getData() != null &&
-                stockGraphView.getData().getDataSetCount() > 0) {
-
-            set1 = (BarDataSet) stockGraphView.getData().getDataSetByIndex(0);
-            set1.setColor(R.color.colorPrimary);
-            set1.setValues(values);
-            stockGraphView.getData().notifyDataChanged();
-            stockGraphView.notifyDataSetChanged();
-        } else {
-            // create a dataset and give it a type
-            set1 = new BarDataSet(values, "DataSet 1");
-
-            // set the line to be drawn like this "- - - - - -"
-            set1.setColor(Color.BLACK);
-
-            ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
-            dataSets.add(set1);
-
-            BarData data = new BarData(dataSets);
-            data.setValueTextSize(10f);
-            data.setBarWidth(0.9f);
-
-            stockGraphView.setData(data);
-        }
     }
 
 
@@ -130,11 +104,9 @@ stockGraphView.setDrawBarShadow(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_detail);
         ButterKnife.bind(this);
-
+   if(rawData!=null&&(!historyData.isEmpty()))
+        setData(historyData);
         getSupportLoaderManager().initLoader(0,null,this);
-
-
-
 
     }
 
@@ -154,15 +126,15 @@ stockGraphView.setDrawBarShadow(false);
 
         data.moveToFirst();
 
-String rawData = data.getString(
-        data.getColumnIndexOrThrow(Contract.Quote.COLUMN_HISTORY)
-);
-        CSVReader csvReader = new CSVReader(new StringReader(rawData), ',');
-        List<HistoryData> historyData = new ArrayList<>();
+        rawData = data.getString(
+                data.getColumnIndexOrThrow(Contract.Quote.COLUMN_HISTORY)
+        );        CSVReader csvReader = new CSVReader(new StringReader(rawData), ',');
+
          String[] check = null;
 
         try {
             while ((check = csvReader.readNext()) != null) {
+
                 HistoryData histPriceModel = new HistoryData();
                 histPriceModel.setHistory(Float.valueOf(check[0]));
                 histPriceModel.setValues(Float.valueOf(check[1]));
@@ -172,10 +144,22 @@ String rawData = data.getString(
         } catch (IOException e) {
             e.printStackTrace();
         }
-if(!fetchDataFirst)
+        Collections.reverse(historyData);
+        if(firstData)
+        {
+            this.refTime = Float.valueOf(historyData.get(0).getHistory());
+            firstData = false;
+        }
 
+        System.out.print(historyData);
 
-    setStockGraphView(historyData);
+        Log.e("llllist", historyData.toString());
+
+        if(!fetchDataFirst) {
+            setData(historyData);
+            fetchDataFirst = true;
+            // supportStartPostponedEnterTransition();
+        }
 
 
         Timber.d("Data : ",rawData);
